@@ -99,9 +99,8 @@ function randomPointInTriangle(p0, p1, p2) {
 /**
  * Finds the intersection point of two line segments, if it exists.
  *
- * This function uses the determinant method to calculate the intersection
- * point of two lines defined by their start and end points. If the lines
- * are parallel (denominator = 0), it returns `null`.
+ * First, it checks if the two vectors have the same direction, if so they are parallel, therefore, no intersection.
+ * But if the denom is != 0, it finds where the intersection is.
  *
  * @param {{x: number, y: number}} line1Start - The starting point of the first line segment.
  * @param {{x: number, y: number}} line1End - The ending point of the first line segment.
@@ -119,7 +118,7 @@ function findSegmentIntersection(line1Start, line1End, line2Start, line2End) {
     const x4 = line2End.x;
     const y4 = line2End.y;
 
-    const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+    const denom = (x1 - x2) * (y3 - y4) - (x3 - x4) * (y1 - y2); // checks if both segments are parallel
 
     if (denom === 0) {
         return null;
