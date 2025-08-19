@@ -1,30 +1,26 @@
+// Global variables
 const canvasWidth = 400;
 const canvasHeight = 400;
 let counter = 0;
+let currentTriangle = [
+    { x: 20, y: 20 },
+    { x: canvasWidth / 2, y: canvasHeight - 20 },
+    { x: canvasWidth - 20, y: 20 }
+];
 
 function setup() {
     createCanvas(canvasWidth, canvasHeight);
     background(220);
 }
 
-var currentTriangle = [
-    { x: 20, y: 20 },
-    { x: canvasWidth / 2, y: canvasHeight - 20 },
-    { x: canvasWidth - 20, y: 20 }
-];
-
 function draw() {
     if (counter > 4) return;
-
-    drawCoordinateSystem();
 
     const [v0, v1, v2] = currentTriangle;
 
     if (counter === 0) {
         triangle(v0.x, v0.y, v1.x, v1.y, v2.x, v2.y);
     }
-
-    currentTriangle.forEach((v, i) => console.log(v.x + " " + v.y));
 
     const { x: randomX, y: randomY } = randomPointInTriangle(v0, v1, v2);
 
@@ -47,25 +43,24 @@ function draw() {
         y: currentTriangle[i2].y - currentTriangle[i1].y,
     };
 
-    const intersection1 = findSegmentIntersection(
+    const newVertex1 = findSegmentIntersection(
         currentTriangle[i1], targetVertex,
         { x: newBaseX, y: newBaseY },
         { x: newBaseX + oppositeVector.x, y: newBaseY + oppositeVector.y }
     );
 
-    const intersection2 = findSegmentIntersection(
+    const newVertex2 = findSegmentIntersection(
         currentTriangle[i2], targetVertex,
         { x: newBaseX, y: newBaseY },
         { x: newBaseX + oppositeVector.x, y: newBaseY + oppositeVector.y }
     );
 
-    currentTriangle[i1] = intersection1;
-    currentTriangle[i2] = intersection2;
+    currentTriangle[i1] = newVertex1;
+    currentTriangle[i2] = newVertex2;
 
-    stroke(255, 255, 255);
     line(
-        newBaseX - oppositeVector.x, newBaseY - oppositeVector.y,
-        newBaseX + oppositeVector.x, newBaseY + oppositeVector.y
+        newVertex1.x, newVertex1.y,
+        newVertex2.x, newVertex2.y
     );
 
     counter++;
