@@ -109,28 +109,32 @@ function randomPointInTriangle(p0, p1, p2) {
  * @returns {{x: number, y: number} | null} The intersection point as `{x, y}` if it exists, or `null` if the lines are parallel.
  */
 function findSegmentIntersection(line1Start, line1End, line2Start, line2End) {
-    const x1 = line1Start.x;
-    const y1 = line1Start.y;
-    const x2 = line1End.x;
-    const y2 = line1End.y;
-    const x3 = line2Start.x;
-    const y3 = line2Start.y;
-    const x4 = line2End.x;
-    const y4 = line2End.y;
+    const x1 = line1Start.x, y1 = line1Start.y;
+    const x2 = line1End.x,   y2 = line1End.y;
+    const x3 = line2Start.x, y3 = line2Start.y;
+    const x4 = line2End.x,   y4 = line2End.y;
 
-    const denom = (x1 - x2) * (y3 - y4) - (x3 - x4) * (y1 - y2); // checks if both segments are parallel
+    // determines the direction of each line
+    const dx1 = x2 - x1;
+    const dy1 = y2 - y1;
+    const dx2 = x4 - x3;
+    const dy2 = y4 - y3;
 
+    const denom = dx1 * dy2 - dy1 * dx2;
     if (denom === 0) {
-        return null;
+        return null; // Parallel lines
     }
 
-    const px = ((x1 * y2 - y1 * x2) * (x3 - x4) -
-        (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
-    const py = ((x1 * y2 - y1 * x2) * (y3 - y4) -
-        (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
+    // solve s
+    const s = ((x3 - x1) * dy2 - (y3 - y1) * dx2) / denom;
+
+    // intersection point
+    const px = x1 + s * dx1;
+    const py = y1 + s * dy1;
 
     return { x: px, y: py };
 }
+
 
 
 setup();
